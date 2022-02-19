@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 )
 
-const API_BASE_URL = "jsonplaceholder.typicode.com"
+const API_BASE_URL = "https://jsonplaceholder.typicode.com"
 
 func main() {
     fmt.Println("GET request...")
@@ -16,26 +15,12 @@ func main() {
 }
 
 func GetRequest(path string) (data string, err error) {
-    defer func () {
-        if err := recover(); err != nil {
-            panic(err)
-        }
-    } ()
-    request_url := &url.URL{
-        Scheme: "https",
-        Host: API_BASE_URL,
-        Path: path,
-        
-    }
-    fmt.Println(request_url.String())
-    resp, err := http.Get(request_url.String())
-    if err != nil {
+    req_url := API_BASE_URL + path
+    res, err := http.Get(req_url);
+    if(err != nil) {
         return "" , err
     }
-    data_bytes, err := ioutil.ReadAll(resp.Body)
-    if err != nil {
-        return "" , err
-    }
-    data = string(data_bytes)
+    raw_bytes, err := ioutil.ReadAll(res.Body) 
+    data = string(raw_bytes)
     return data, err
 }

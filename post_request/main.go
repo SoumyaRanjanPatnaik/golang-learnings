@@ -27,6 +27,7 @@ func PostRequest(path string, data string) {
     if(err != nil) {
         return
     }
+    defer res.Body.Close()
     fmt.Println("Successfully Created Resource:")
     res_bytes, err := ioutil.ReadAll(res.Body)
     if(err != nil) {
